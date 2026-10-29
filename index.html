@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IPL 2026 Ticket Booking</title>
+  <style>
+    :root { --navy:#07152f; --blue:#1447e6; --cyan:#38bdf8; --orange:#ff8a1f; --light:#f4f7fb; --white:#fff; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; font-family:Segoe UI, Arial, sans-serif; color:#1e293b; background:linear-gradient(rgba(244, 247, 251, 0.88), rgba(244, 247, 251, 0.90)), url('ipl_teams_flags_bg.jpg') center center / cover fixed no-repeat; min-height:100vh; }
+    a { text-decoration:none; }
+    nav { height:72px; padding:0 6%; display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.95); backdrop-filter:blur(10px); box-shadow:0 2px 12px #0001; position:sticky; top:0; z-index:10; }
+    .logo { font-size:22px; font-weight:800; color:var(--navy); }
+    .logo span { color:var(--orange); }
+    nav ul { display:flex; gap:28px; list-style:none; margin:0; padding:0; }
+    nav a { color:#334155; font-weight:600; }
+    nav a:hover { color:var(--blue); }
+    .hero { min-height:550px; padding:60px 8%; display:grid; grid-template-columns:1.15fr .85fr; align-items:center; color:white; background:linear-gradient(90deg, rgba(7,21,47,0.95) 0%, rgba(10,59,135,0.85) 50%, rgba(7,21,47,0.65) 100%), url('ipl_trophy_bg.png') center right / cover no-repeat; overflow:hidden; position:relative; }
+    .hero h1 { max-width:700px; margin:16px 0; font-size:56px; line-height:1.08; }
+    .hero h1 span { color:#ffad2f; }
+    .hero p { max-width:570px; font-size:18px; line-height:1.7; color:#dbeafe; }
+    .eyebrow { color:#7dd3fc; font-weight:800; letter-spacing:2px; text-transform:uppercase; }
+    .buttons { margin-top:30px; display:flex; gap:14px; }
+    .btn { display:inline-block; border:none; border-radius:6px; padding:13px 24px; font-weight:700; cursor:pointer; font-size:16px; }
+    .btn-primary { background:var(--orange); color:white; }
+    .btn-secondary { border:2px solid white; background:transparent; color:white; }
+    .trophy-showcase { height:360px; border-radius:20px; background:linear-gradient(180deg, rgba(0,0,0,0.1), rgba(7,21,47,0.6)), url('ipl_trophy_bg.png') center center / cover no-repeat; border:4px solid rgba(255,255,255,0.25); box-shadow:0 30px 60px rgba(0,0,0,0.5), 0 0 30px rgba(56,189,248,0.2); position:relative; transform:rotate(-1deg); transition:transform .3s ease; }
+    .trophy-showcase:hover { transform:scale(1.02) rotate(0deg); }
+    section { padding:70px 6%; }
+    section h2 { color:var(--navy); font-size:34px; margin-top:0; }
+    .section-lead { color:#64748b; margin-bottom:28px; }
+    .about-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:24px; }
+    .guideline-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+    .info-card { background:rgba(255,255,255,0.94); backdrop-filter:blur(8px); border:1px solid #e2e8f0; border-radius:12px; padding:25px; box-shadow:0 8px 25px #0f172a12; }
+    .schedule-wrap { overflow-x:auto; }
+    .filter { margin-bottom:16px; padding:10px; border-radius:6px; border:1px solid #cbd5e1; background:white; }
+    table { width:100%; border-collapse:collapse; background:rgba(255,255,255,0.95); backdrop-filter:blur(8px); border-radius:8px; overflow:hidden; }
+    th, td { padding:14px; text-align:left; border-bottom:1px solid #e2e8f0; }
+    th { background:var(--navy); color:white; }
+    tr:hover td { background:rgba(241,245,249,0.8); }
+    .booking-grid { display:grid; grid-template-columns:1fr .7fr; gap:28px; align-items:start; }
+    form, .summary { background:rgba(255,255,255,0.95); backdrop-filter:blur(8px); border:1px solid #e2e8f0; border-radius:12px; padding:28px; box-shadow:0 8px 25px #0f172a12; }
+    label { display:block; font-weight:700; margin:12px 0 7px; }
+    input, select { width:100%; padding:12px; border:1px solid #cbd5e1; border-radius:6px; font-size:15px; background:white; }
+    .summary { position:sticky; top:95px; background:rgba(238,246,255,0.95); }
+    .summary-row { display:flex; justify-content:space-between; margin:16px 0; }
+    .total { border-top:2px solid #94a3b8; padding-top:18px; font-size:22px; font-weight:800; color:var(--blue); }
+    .sms-notification { position: fixed; top: 24px; right: 24px; max-width: 440px; width: calc(100% - 48px); background: #0f172a; color: #fff; border-radius: 16px; padding: 18px 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.15); z-index: 9999; animation: slideDown 0.35s cubic-bezier(0.16, 1, 0.3, 1); max-height: 90vh; overflow-y: auto; }
+    @keyframes slideDown { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .sms-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.12); padding-bottom: 8px; }
+    .sms-icon { font-size: 18px; background: #2563eb; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 8px; }
+    .sms-meta { flex: 1; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #94a3b8; }
+    .sms-meta strong { display: block; color: #f8fafc; font-size: 13px; text-transform: none; }
+    .sms-close { background: transparent; border: none; color: #94a3b8; font-size: 22px; cursor: pointer; line-height: 1; padding: 0 4px; }
+    .sms-close:hover { color: white; }
+    .notify-tabs { display: flex; gap: 6px; margin-bottom: 12px; background: rgba(255,255,255,0.08); padding: 4px; border-radius: 8px; }
+    .tab-btn { flex: 1; padding: 8px 10px; border: none; background: transparent; color: #94a3b8; font-weight: 700; font-size: 12px; border-radius: 6px; cursor: pointer; transition: all .2s; }
+    .tab-btn.active { background: #2563eb; color: #fff; }
+    .sms-recipient { font-size: 12px; color: #38bdf8; font-weight: 700; margin: 0 0 8px 0; }
+    .sms-body { font-size: 13.5px; line-height: 1.55; color: #e2e8f0; }
+    .email-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; padding: 14px; font-size: 13px; color: #e2e8f0; }
+    .email-meta-row { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed rgba(255,255,255,0.15); }
+    /* UPI QR Payment Modal */
+    .payment-modal-overlay { position: fixed; inset: 0; background: rgba(7, 21, 47, 0.82); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 10000; padding: 20px; animation: fadeIn 0.22s ease; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .payment-modal { background: #ffffff; color: #0f172a; width: 100%; max-width: 410px; border-radius: 20px; padding: 26px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45); text-align: center; position: relative; animation: scaleUp 0.28s cubic-bezier(0.16, 1, 0.3, 1); }
+    @keyframes scaleUp { from { transform: scale(0.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .qr-frame { margin: 14px auto; padding: 10px; background: #ffffff; border: 2px dashed #0284c7; border-radius: 14px; display: inline-block; box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
+    .qr-frame img { width: 190px; height: 190px; display: block; border-radius: 8px; }
+    .upi-badge-row { display: flex; justify-content: center; gap: 6px; margin: 10px 0 14px; flex-wrap: wrap; }
+    .upi-badge { background: #f1f5f9; border: 1px solid #cbd5e1; padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 700; color: #475569; }
+    footer { background:var(--navy); color:#cbd5e1; text-align:center; padding:24px; }
+    @media(max-width:800px) { nav { height:auto; padding:15px 5%; align-items:flex-start; } nav ul { gap:12px; flex-wrap:wrap; justify-content:flex-end; } .hero { grid-template-columns:1fr; padding:50px 6%; } .hero h1 { font-size:42px; } .trophy-showcase { height:260px; margin-top:35px; } .about-grid,.guideline-grid,.booking-grid { grid-template-columns:1fr; } .summary { position:static; } }
+  </style>
+</head>
+<body>
+  <nav aria-label="Main navigation">
+    <div class="logo">IPL <span>BOOK</span></div>
+    <ul>
+      <li><a href="#matches">Matches</a></li><li><a href="#booking">Book Ticket</a></li><li><a href="#my-bookings">My Bookings</a></li><li><a href="#guidelines">Guidelines</a></li>
+    </ul>
+  </nav>
+
+  <header class="hero">
+    <div>
+      <div class="eyebrow">IPL 2026 • Live Action</div>
+      <h1>Experience The <span>Stadium Energy</span> Live!</h1>
+      <p>Feel every boundary, cheer every wicket and watch your favourite IPL stars compete for the coveted trophy under the lights.</p>
+      <div class="buttons"><a class="btn btn-secondary" href="#matches">View Schedule</a><a class="btn btn-primary" href="#booking">Book Ticket</a></div>
+    </div>
+    <div class="trophy-showcase" aria-label="Official TATA IPL Trophy"></div>
+  </header>
+
+  <main>
+    <section id="about">
+      <h2>About IPL 2026 & Ticket Booking Details</h2>
+      <p class="section-lead">Everything you need to know about franchises, iconic match venues, ticket stand categories, and stadium entry policies.</p>
+      
+      <div class="about-grid">
+        <div class="info-card">
+          <h3>🏏 All 10 IPL Franchises</h3>
+          <p style="font-size:13px;color:#64748b;margin-bottom:12px;">Top teams competing for the coveted TATA IPL 2026 trophy:</p>
+          <ul style="columns: 2; column-gap: 20px; padding-left: 20px; margin: 0; line-height: 1.8;">
+            <li>Chennai Super Kings</li>
+            <li>Delhi Capitals</li>
+            <li>Gujarat Titans</li>
+            <li>Kolkata Knight Riders</li>
+            <li>Lucknow Super Giants</li>
+            <li>Mumbai Indians</li>
+            <li>Punjab Kings</li>
+            <li>Rajasthan Royals</li>
+            <li>Royal Challengers Bengaluru</li>
+            <li>Sunrisers Hyderabad</li>
+          </ul>
+        </div>
+
+        <div class="info-card">
+          <h3>🏟️ Major Match Venues</h3>
+          <p style="font-size:13px;color:#64748b;margin-bottom:12px;">World-class stadiums hosting live matches:</p>
+          <ul style="columns: 2; column-gap: 20px; padding-left: 20px; margin: 0; line-height: 1.8;">
+            <li>M. Chinnaswamy Stadium, Bengaluru</li>
+            <li>Wankhede Stadium, Mumbai</li>
+            <li>MA Chidambaram Stadium, Chennai</li>
+            <li>Arun Jaitley Stadium, Delhi</li>
+            <li>Eden Gardens, Kolkata</li>
+            <li>Narendra Modi Stadium, Ahmedabad</li>
+            <li>Ekana Cricket Stadium, Lucknow</li>
+            <li>Rajiv Gandhi Stadium, Hyderabad</li>
+          </ul>
+        </div>
+
+        <div class="info-card">
+          <h3>🎟️ Ticket Stand Categories & Perks</h3>
+          <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px;font-size:14px;">
+            <li style="padding:10px;background:#f8fafc;border-radius:8px;border-left:4px solid #38bdf8;">
+              <strong style="color:var(--navy);font-size:15px;">General Stand (₹700 – ₹900)</strong><br>
+              Standard stadium tier seating, unobstructed view of giant screens, free water refill stations, and open public food stalls.
+            </li>
+            <li style="padding:10px;background:#f8fafc;border-radius:8px;border-left:4px solid #ff8a1f;">
+              <strong style="color:var(--navy);font-size:15px;">Premium Stand (₹1,500 – ₹2,000)</strong><br>
+              Reserved mid-tier shaded seating, fast-track entry turnstiles, complimentary official team flag, and dedicated concession stands.
+            </li>
+            <li style="padding:10px;background:#f8fafc;border-radius:8px;border-left:4px solid #1447e6;">
+              <strong style="color:var(--navy);font-size:15px;">VIP Corporate Hospitality (₹3,800 – ₹5,000)</strong><br>
+              Air-conditioned luxury lounge, padded balcony front-row seats, unlimited 5-star buffet meals & mocktails, and exclusive VIP parking pass.
+            </li>
+          </ul>
+        </div>
+
+        <div class="info-card">
+          <h3>📋 Key Booking & Entry Policies</h3>
+          <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:11px;font-size:14px;line-height:1.5;">
+            <li style="display:flex;gap:10px;align-items:flex-start;">
+              <span style="color:#22c55e;font-size:18px;">📲</span>
+              <div><strong>Instant SMS & QR Pass:</strong> Once booked, an instant confirmation SMS with unique Booking ID & QR entry code is delivered to your registered phone number.</div>
+            </li>
+            <li style="display:flex;gap:10px;align-items:flex-start;">
+              <span style="color:#2563eb;font-size:18px;">⏰</span>
+              <div><strong>Stadium Gate Timings:</strong> Gates open 3 hours before match toss (4:30 PM for night games). Entry strictly closes at the end of the 10th over of the 1st innings.</div>
+            </li>
+            <li style="display:flex;gap:10px;align-items:flex-start;">
+              <span style="color:#f59e0b;font-size:18px;">🔢</span>
+              <div><strong>Ticket Purchase Limit:</strong> Maximum of 10 tickets per customer (per mobile number/email) to prevent scalping and ensure fair fan distribution.</div>
+            </li>
+            <li style="display:flex;gap:10px;align-items:flex-start;">
+              <span style="color:#ef4444;font-size:18px;">🔄</span>
+              <div><strong>Rain & Cancellation Policy:</strong> 100% full refund is initiated automatically if a match is abandoned without a single ball bowled.</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="matches">
+      <h2>Match Schedule</h2>
+      <label for="teamFilter">Filter by team</label>
+      <select id="teamFilter" class="filter">
+        <option value="All">All Teams (10)</option>
+        <option value="Chennai Super Kings">Chennai Super Kings</option>
+        <option value="Delhi Capitals">Delhi Capitals</option>
+        <option value="Gujarat Titans">Gujarat Titans</option>
+        <option value="Kolkata Knight Riders">Kolkata Knight Riders</option>
+        <option value="Lucknow Super Giants">Lucknow Super Giants</option>
+        <option value="Mumbai Indians">Mumbai Indians</option>
+        <option value="Punjab Kings">Punjab Kings</option>
+        <option value="Rajasthan Royals">Rajasthan Royals</option>
+        <option value="Royal Challengers Bengaluru">Royal Challengers Bengaluru</option>
+        <option value="Sunrisers Hyderabad">Sunrisers Hyderabad</option>
+      </select>
+      <div class="schedule-wrap"><table id="scheduleTable">
+        <thead><tr><th>Match #</th><th>Teams</th><th>Date & Time</th><th>Venue</th><th>General</th><th>Premium</th><th>VIP</th><th></th></tr></thead>
+        <tbody>
+          <tr data-team="Royal Challengers Bengaluru, Mumbai Indians"><td>1</td><td>RCB vs MI</td><td>25 Mar 2026, 7:30 PM</td><td>M. Chinnaswamy, Bengaluru</td><td>₹800</td><td>₹1,800</td><td>₹4,500</td><td><a href="#booking" class="btn btn-primary" onclick="selectMatch('RCB vs MI')">Book</a></td></tr>
+          <tr data-team="Chennai Super Kings, Delhi Capitals"><td>2</td><td>CSK vs DC</td><td>26 Mar 2026, 7:30 PM</td><td>MA Chidambaram, Chennai</td><td>₹750</td><td>₹1,650</td><td>₹4,000</td><td><a href="#booking" class="btn btn-primary" onclick="selectMatch('CSK vs DC')">Book</a></td></tr>
+          <tr data-team="Kolkata Knight Riders, Sunrisers Hyderabad"><td>3</td><td>KKR vs SRH</td><td>27 Mar 2026, 7:30 PM</td><td>Eden Gardens, Kolkata</td><td>₹850</td><td>₹1,750</td><td>₹4,200</td><td><a href="#booking" class="btn btn-primary" onclick="selectMatch('KKR vs SRH')">Book</a></td></tr>
+          <tr data-team="Gujarat Titans, Rajasthan Royals"><td>4</td><td>GT vs RR</td><td>28 Mar 2026, 3:30 PM</td><td>Narendra Modi, Ahmedabad</td><td>₹700</td><td>₹1,500</td><td>₹3,800</td><td><a href="#booking" class="btn btn-primary" onclick="selectMatch('GT vs RR')">Book</a></td></tr>
+          <tr data-team="Lucknow Super Giants, Punjab Kings"><td>5</td><td>LSG vs PBKS</td><td>28 Mar 2026, 7:30 PM</td><td>Ekana Stadium, Lucknow</td><td>₹750</td><td>₹1,600</td><td>₹4,000</td><td><a href="#booking" class="btn btn-primary" onclick="selectMatch('LSG vs PBKS')">Book</a></td></tr>
+          <tr data-team="Mumbai Indians, Chennai Super Kings"><td>6</td><td>MI vs CSK</td><td>29 Mar 2026, 7:30 PM</td><td>Wankhede Stadium, Mumbai</td><td>₹950</td><td>₹2,200</td><td>₹5,500</td><td><a href="#booking" class="btn btn-primary" onclick="selectMatch('MI vs CSK')">Book</a></td></tr>
+          <tr data-team="Delhi Capitals, Royal Challengers Bengaluru"><td>7</td><td>DC vs RCB</td><td>30 Mar 2026, 7:30 PM</td><td>Arun Jaitley Stadium, Delhi</td><td>₹800</td><td>₹1,700</td><td>₹4,200</td><td><a href="#booking" class="btn btn-primary" onclick="selectMatch('DC vs RCB')">Book</a></td></tr>
+          <tr data-team="Sunrisers Hyderabad, Gujarat Titans"><td>8</td><td>SRH vs GT</td><td>31 Mar 2026, 7:30 PM</td><td>Rajiv Gandhi, Hyderabad</td><td>₹700</td><td>₹1,550</td><td>₹3,900</td><td><a href="#booking" class="btn btn-primary" onclick="selectMatch('SRH vs GT')">Book</a></td></tr>
+          <tr data-team="Rajasthan Royals, Lucknow Super Giants"><td>9</td><td>RR vs LSG</td><td>01 Apr 2026, 7:30 PM</td><td>Sawai Mansingh, Jaipur</td><td>₹750</td><td>₹1,650</td><td>₹4,000</td><td><a href="#booking" class="btn btn-primary" onclick="selectMatch('RR vs LSG')">Book</a></td></tr>
+          <tr data-team="Punjab Kings, Kolkata Knight Riders"><td>10</td><td>PBKS vs KKR</td><td>02 Apr 2026, 7:30 PM</td><td>PCA Stadium, Mohali</td><td>₹700</td><td>₹1,500</td><td>₹3,800</td><td><a href="#booking" class="btn btn-primary" onclick="selectMatch('PBKS vs KKR')">Book</a></td></tr>
+          <tr data-team="Chennai Super Kings, Royal Challengers Bengaluru"><td>11</td><td>CSK vs RCB</td><td>03 Apr 2026, 7:30 PM</td><td>MA Chidambaram, Chennai</td><td>₹900</td><td>₹2,000</td><td>₹5,000</td><td><a href="#booking" class="btn btn-primary" onclick="selectMatch('CSK vs RCB')">Book</a></td></tr>
+          <tr data-team="Mumbai Indians, Gujarat Titans"><td>12</td><td>MI vs GT</td><td>04 Apr 2026, 3:30 PM</td><td>Wankhede Stadium, Mumbai</td><td>₹850</td><td>₹1,900</td><td>₹4,800</td><td><a href="#booking" class="btn btn-primary" onclick="selectMatch('MI vs GT')">Book</a></td></tr>
+          <tr data-team="Delhi Capitals, Sunrisers Hyderabad"><td>13</td><td>DC vs SRH</td><td>04 Apr 2026, 7:30 PM</td><td>Arun Jaitley Stadium, Delhi</td><td>₹750</td><td>₹1,600</td><td>₹4,000</td><td><a href="#booking" class="btn btn-primary" onclick="selectMatch('DC vs SRH')">Book</a></td></tr>
+          <tr data-team="Kolkata Knight Riders, Rajasthan Royals"><td>14</td><td>KKR vs RR</td><td>05 Apr 2026, 3:30 PM</td><td>Eden Gardens, Kolkata</td><td>₹800</td><td>₹1,700</td><td>₹4,200</td><td><a href="#booking" class="btn btn-primary" onclick="selectMatch('KKR vs RR')">Book</a></td></tr>
+          <tr data-team="Lucknow Super Giants, Chennai Super Kings"><td>15</td><td>LSG vs CSK</td><td>05 Apr 2026, 7:30 PM</td><td>Ekana Stadium, Lucknow</td><td>₹800</td><td>₹1,750</td><td>₹4,500</td><td><a href="#booking" class="btn btn-primary" onclick="selectMatch('LSG vs CSK')">Book</a></td></tr>
+          <tr data-team="Royal Challengers Bengaluru, Punjab Kings"><td>16</td><td>RCB vs PBKS</td><td>06 Apr 2026, 7:30 PM</td><td>M. Chinnaswamy, Bengaluru</td><td>₹850</td><td>₹1,850</td><td>₹4,600</td><td><a href="#booking" class="btn btn-primary" onclick="selectMatch('RCB vs PBKS')">Book</a></td></tr>
+          <tr data-team="Rajasthan Royals, Mumbai Indians"><td>17</td><td>RR vs MI</td><td>07 Apr 2026, 7:30 PM</td><td>Sawai Mansingh, Jaipur</td><td>₹800</td><td>₹1,750</td><td>₹4,300</td><td><a href="#booking" class="btn btn-primary" onclick="selectMatch('RR vs MI')">Book</a></td></tr>
+          <tr data-team="Gujarat Titans, Delhi Capitals"><td>18</td><td>GT vs DC</td><td>08 Apr 2026, 7:30 PM</td><td>Narendra Modi, Ahmedabad</td><td>₹700</td><td>₹1,500</td><td>₹3,800</td><td><a href="#booking" class="btn btn-primary" onclick="selectMatch('GT vs DC')">Book</a></td></tr>
+          <tr data-team="Sunrisers Hyderabad, Royal Challengers Bengaluru"><td>19</td><td>SRH vs RCB</td><td>09 Apr 2026, 7:30 PM</td><td>Rajiv Gandhi, Hyderabad</td><td>₹850</td><td>₹1,800</td><td>₹4,500</td><td><a href="#booking" class="btn btn-primary" onclick="selectMatch('SRH vs RCB')">Book</a></td></tr>
+          <tr data-team="Kolkata Knight Riders, Mumbai Indians"><td>20</td><td>KKR vs MI</td><td>10 Apr 2026, 7:30 PM</td><td>Eden Gardens, Kolkata</td><td>₹900</td><td>₹2,000</td><td>₹5,000</td><td><a href="#booking" class="btn btn-primary" onclick="selectMatch('KKR vs MI')">Book</a></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section id="booking">
+      <h2>Ticket Booking</h2><p class="section-lead">Reserve your seat and be part of the stadium atmosphere.</p>
+      <div class="booking-grid">
+        <form id="bookingForm">
+          <label for="match">Match</label>
+          <select id="match" required>
+            <option>RCB vs MI (Bengaluru - 25 Mar)</option>
+            <option>CSK vs DC (Chennai - 26 Mar)</option>
+            <option>KKR vs SRH (Kolkata - 27 Mar)</option>
+            <option>GT vs RR (Ahmedabad - 28 Mar)</option>
+            <option>LSG vs PBKS (Lucknow - 28 Mar)</option>
+            <option>MI vs CSK (Mumbai - 29 Mar)</option>
+            <option>DC vs RCB (Delhi - 30 Mar)</option>
+            <option>SRH vs GT (Hyderabad - 31 Mar)</option>
+            <option>RR vs LSG (Jaipur - 01 Apr)</option>
+            <option>PBKS vs KKR (Mohali - 02 Apr)</option>
+            <option>CSK vs RCB (Chennai - 03 Apr)</option>
+            <option>MI vs GT (Mumbai - 04 Apr)</option>
+            <option>DC vs SRH (Delhi - 04 Apr)</option>
+            <option>KKR vs RR (Kolkata - 05 Apr)</option>
+            <option>LSG vs CSK (Lucknow - 05 Apr)</option>
+            <option>RCB vs PBKS (Bengaluru - 06 Apr)</option>
+            <option>RR vs MI (Jaipur - 07 Apr)</option>
+            <option>GT vs DC (Ahmedabad - 08 Apr)</option>
+            <option>SRH vs RCB (Hyderabad - 09 Apr)</option>
+            <option>KKR vs MI (Kolkata - 10 Apr)</option>
+          </select>
+          <label for="stand">Stand Category</label><select id="stand" required><option value="800">General - ₹800</option><option value="1800">Premium - ₹1,800</option><option value="4500">VIP - ₹4,500</option></select>
+          <label for="quantity">Number of Tickets</label><input id="quantity" type="number" min="1" max="10" value="1" required>
+          <label for="name">Name</label><input id="name" type="text" required>
+          <label for="email">Email</label><input id="email" type="email" required>
+          <label for="phone">Phone Number</label><input id="phone" type="tel" pattern="[0-9]{10}" placeholder="10-digit mobile number" required>
+          <button class="btn btn-primary" id="bookSubmitBtn" type="submit" style="margin-top:22px;width:100%">💳 Proceed to Pay with QR (₹800)</button>
+        </form>
+        <aside class="summary" id="bookingSummaryCard" aria-live="polite">
+          <div id="liveSummaryView">
+            <h3>Booking Summary</h3>
+            <div class="summary-row"><span>Match</span><strong id="summaryMatch">RCB vs MI</strong></div>
+            <div class="summary-row"><span>Stand</span><strong id="summaryStand">General</strong></div>
+            <div class="summary-row"><span>Ticket Price</span><strong id="summaryPrice">₹800</strong></div>
+            <div class="summary-row"><span>Quantity</span><strong id="summaryQuantity">1</strong></div>
+            <div class="summary-row total"><span>Total Amount</span><span id="summaryTotal">₹800</span></div>
+          </div>
+
+          <div id="confirmedDetailsView" style="display:none;background:#ffffff;padding:22px;border-radius:10px;border:2px solid #22c55e;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+              <span style="background:#22c55e;color:white;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:16px;">✓</span>
+              <div>
+                <h3 style="margin:0;color:#15803d;font-size:18px;">Booking Confirmed!</h3>
+                <span style="font-size:12px;color:#64748b;">E-Ticket Details</span>
+              </div>
+            </div>
+            <div class="summary-row"><span>Booking ID</span><strong id="confirmedId" style="color:var(--blue);font-size:16px;">#IPL26-000000</strong></div>
+            <div class="summary-row"><span>Customer Name</span><strong id="confirmedName">-</strong></div>
+            <div class="summary-row"><span>Phone</span><strong id="confirmedPhone">-</strong></div>
+            <div class="summary-row"><span>Email</span><strong id="confirmedEmail" style="color:var(--blue);">-</strong></div>
+            <div class="summary-row"><span>Match</span><strong id="confirmedMatch">-</strong></div>
+            <div class="summary-row"><span>Category</span><strong id="confirmedStand">-</strong></div>
+            <div class="summary-row"><span>Quantity</span><strong id="confirmedQty">-</strong></div>
+            <div class="summary-row total" style="margin-top:12px;padding-top:12px;"><span>Total Paid</span><span id="confirmedTotal" style="color:#15803d;">₹0</span></div>
+            <div style="margin-top:10px;padding:8px 12px;background:#ecfdf5;border-radius:6px;font-size:12px;color:#065f46;display:flex;align-items:center;justify-content:space-between;">
+              <span>✓ Paid & Confirmed! E-Ticket sent to Email & Phone.</span>
+              <a href="#my-bookings" style="color:#0369a1;font-weight:700;text-decoration:underline;">View in Table ↓</a>
+            </div>
+            <button type="button" class="btn btn-secondary" onclick="resetToNewBooking()" style="width:100%;margin-top:14px;background:var(--navy);color:white;border:none;">Book Another Ticket</button>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="my-bookings">
+      <h2>My Ticket Bookings <span id="bookingCountBadge" style="font-size:14px;background:var(--blue);color:white;padding:3px 10px;border-radius:20px;vertical-align:middle;margin-left:8px;">0</span></h2>
+      <div class="schedule-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Booking ID</th>
+              <th>Customer</th>
+              <th>Phone</th>
+              <th>Email</th>
+              <th>Match</th>
+              <th>Category</th>
+              <th>Tickets</th>
+              <th>Amount</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="myBookingsBody">
+            <tr><td colspan="9" style="text-align:center;color:#64748b">No bookings yet</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="guidelines"><h2>Guidelines</h2><div class="guideline-grid"><article class="info-card"><h3>Ticket Verification</h3><p>Keep the QR code accessible on your mobile device or carry a printed copy for entry verification.</p></article><article class="info-card"><h3>ID Proof Requirement</h3><p>Carry a valid government-issued photo ID that matches the details used for booking.</p></article><article class="info-card"><h3>Prohibited Items</h3><p>Weapons, fireworks, glass bottles, alcohol and large bags are not permitted inside the stadium.</p></article></div></section>
+  </main>
+
+  <footer>© 2026 IPL Ticket Booking. All rights reserved.</footer>
+
+  <!-- UPI Payment QR Code Modal -->
+  <div id="paymentModal" class="payment-modal-overlay" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="payModalTitle">
+    <div class="payment-modal">
+      <button type="button" onclick="cancelPayment()" style="position:absolute;top:16px;right:18px;background:none;border:none;font-size:24px;cursor:pointer;color:#64748b;" aria-label="Cancel payment">&times;</button>
+      
+      <div style="display:inline-block;background:#e0f2fe;color:#0369a1;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:700;margin-bottom:6px;">
+        🔒 SECURE UPI PAYMENT
+      </div>
+      <h3 id="payModalTitle" style="margin:6px 0;color:#07152f;font-size:22px;">Scan QR to Pay</h3>
+      <p style="margin:0 0 12px;color:#64748b;font-size:13px;">Use any UPI App to complete your ticket booking</p>
+
+      <div style="background:#f8fafc;padding:12px;border-radius:12px;border:1px solid #e2e8f0;margin-bottom:12px;">
+        <span style="font-size:12px;color:#64748b;font-weight:600;">Amount to Pay</span>
+        <div id="qrPayAmount" style="font-size:28px;font-weight:800;color:#1447e6;margin-top:2px;">₹800</div>
+        <div id="qrPayDetails" style="font-size:12px;color:#475569;margin-top:2px;font-weight:600;">Match • 1 Ticket</div>
+      </div>
+
+      <div class="qr-frame">
+        <img id="upiQrImage" src="" alt="Scan UPI QR Code to Pay">
+      </div>
+
+      <div style="font-size:12px;color:#475569;margin-top:2px;">
+        Payee: <strong style="color:#0f172a;">TATA IPL 2026 Ticketing</strong>
+      </div>
+      <div style="font-size:11px;color:#64748b;margin-top:2px;">
+        UPI ID: <strong style="color:#0284c7;">ipl2026tickets@okhdfcbank</strong>
+      </div>
+
+      <div class="upi-badge-row">
+        <span class="upi-badge">GPay</span>
+        <span class="upi-badge">PhonePe</span>
+        <span class="upi-badge">Paytm</span>
+        <span class="upi-badge">BHIM</span>
+        <span class="upi-badge">CRED</span>
+      </div>
+
+      <div style="font-size:12px;color:#ef4444;font-weight:700;margin-bottom:14px;">
+        ⏳ QR Code expires in: <span id="timerCountdown">04:59</span>
+      </div>
+
+      <button id="verifyPayBtn" type="button" class="btn btn-primary" onclick="simulatePaymentSuccess()" style="width:100%;padding:13px;font-size:15px;background:#22c55e;">
+        ✓ I Have Paid (Verify Payment)
+      </button>
+      <button type="button" class="btn" onclick="cancelPayment()" style="width:100%;margin-top:8px;background:transparent;color:#64748b;padding:8px;font-size:13px;">
+        Cancel Transaction
+      </button>
+    </div>
+  </div>
+
+  <!-- Customer SMS & Email Confirmation Popup -->
+  <aside id="smsNotification" class="sms-notification" style="display:none;" role="alert" aria-live="assertive">
+    <div class="sms-header">
+      <div class="sms-icon" id="notifyIcon">📧</div>
+      <div class="sms-meta">
+        <strong id="notifyTitle">BOOKING CONFIRMATION SENT</strong>
+        <span id="notifySub">E-Ticket Delivered Just Now</span>
+      </div>
+      <button type="button" class="sms-close" onclick="closeSms()" aria-label="Close notification">&times;</button>
+    </div>
+
+    <!-- Notification Switcher Tabs -->
+    <div class="notify-tabs">
+      <button id="tabEmailBtn" type="button" class="tab-btn active" onclick="switchNotifyTab('email')">📧 Email Sent</button>
+      <button id="tabSmsBtn" type="button" class="tab-btn" onclick="switchNotifyTab('sms')">💬 Phone SMS</button>
+    </div>
+
+    <!-- Email Notification Card -->
+    <div id="tabEmailContent" class="email-card">
+      <div class="email-meta-row">
+        <span><strong>From:</strong> tickets@iplt20.com</span>
+        <span style="color:#22c55e;font-weight:700;">✓ Delivered</span>
+      </div>
+      <div class="email-meta-row">
+        <span><strong>To:</strong> <span id="emailRecipient" style="color:#38bdf8;font-weight:700;">customer@mail.com</span></span>
+        <span>Just now</span>
+      </div>
+      <div class="email-meta-row" style="border-bottom:1px solid rgba(255,255,255,0.2);">
+        <span><strong>Subject:</strong> <span id="emailSubject" style="color:#fde047;font-weight:700;">🎟️ Official TATA IPL E-Ticket</span></span>
+      </div>
+      <div id="emailBodyText" style="margin-top:10px;line-height:1.55;"></div>
+      <div style="margin-top:14px;display:flex;gap:8px;">
+        <a id="emailMailtoLink" href="#" class="btn btn-primary" style="padding:9px 14px;font-size:12px;text-align:center;flex:1;background:#2563eb;text-decoration:none;">Open in Mail App</a>
+        <button type="button" onclick="window.print()" class="btn btn-secondary" style="padding:9px 14px;font-size:12px;flex:1;border:1px solid #ffffff55;">Print E-Ticket</button>
+      </div>
+    </div>
+
+    <!-- SMS Notification Card -->
+    <div id="tabSmsContent" class="sms-body" style="display:none;">
+      <p class="sms-recipient">📲 Sent to: <span id="smsPhone">+91 XXXXXXXXXX</span></p>
+      <div id="smsText"></div>
+    </div>
+  </aside>
+
+  <script>
+    const matchSelect = document.getElementById('match');
+    const standSelect = document.getElementById('stand');
+    const quantity = document.getElementById('quantity');
+    const standNames = {800:'General',1800:'Premium',4500:'VIP'};
+
+    let pendingBookingPayload = null;
+    let paymentTimerInterval = null;
+
+    // Robust In-Memory + LocalStorage Booking Store
+    let userBookingsList = [];
+    try {
+      const stored = localStorage.getItem('ipl_user_bookings');
+      if (stored) {
+        userBookingsList = JSON.parse(stored);
+      }
+    } catch (e) {
+      userBookingsList = [];
+    }
+
+    function renderBookings() {
+      const tbody = document.getElementById('myBookingsBody');
+      const badge = document.getElementById('bookingCountBadge');
+      if (badge) badge.textContent = userBookingsList.length;
+      if (!tbody) return;
+
+      if (!userBookingsList || userBookingsList.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:#64748b;padding:24px;">No bookings yet. Reserve your tickets above!</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = userBookingsList.map((b, idx) => `
+        <tr style="${idx === 0 ? 'background:#ecfdf5;border-left:4px solid #22c55e;' : ''}">
+          <td><strong style="color:var(--blue);font-size:14px;">${b.id}</strong></td>
+          <td><strong>${b.name}</strong></td>
+          <td>${b.phone}</td>
+          <td><span style="color:#0284c7;font-size:13px;">${b.email || '-'}</span></td>
+          <td><strong>${b.match}</strong></td>
+          <td>${b.stand}</td>
+          <td><strong>${b.quantity}</strong></td>
+          <td><strong style="color:#15803d;font-size:15px;">₹${b.total}</strong></td>
+          <td><span style="background:#22c55e22;color:#15803d;padding:5px 12px;border-radius:20px;font-weight:700;font-size:12px;display:inline-block;">✓ Paid & Confirmed</span></td>
+        </tr>
+      `).join('');
+    }
+
+    function updateSummary() {
+      const price = Number(standSelect.value);
+      const count = Number(quantity.value) || 0;
+      const totalFormatted = (price * count).toLocaleString('en-IN');
+      document.getElementById('summaryMatch').textContent = matchSelect.value;
+      document.getElementById('summaryStand').textContent = standNames[price];
+      document.getElementById('summaryPrice').textContent = '₹' + price.toLocaleString('en-IN');
+      document.getElementById('summaryQuantity').textContent = count;
+      document.getElementById('summaryTotal').textContent = '₹' + totalFormatted;
+
+      const submitBtn = document.getElementById('bookSubmitBtn');
+      if (submitBtn) {
+        submitBtn.textContent = `💳 Proceed to Pay with QR (₹${totalFormatted})`;
+      }
+    }
+
+    function selectMatch(matchPrefix) { 
+      resetToNewBooking();
+      for (let i = 0; i < matchSelect.options.length; i++) {
+        if (matchSelect.options[i].value.includes(matchPrefix)) {
+          matchSelect.selectedIndex = i;
+          break;
+        }
+      }
+      updateSummary(); 
+    }
+
+    function resetToNewBooking() {
+      document.getElementById('liveSummaryView').style.display = 'block';
+      document.getElementById('confirmedDetailsView').style.display = 'none';
+      updateSummary();
+    }
+
+    matchSelect.addEventListener('change', updateSummary); 
+    standSelect.addEventListener('change', updateSummary); 
+    quantity.addEventListener('input', updateSummary);
+
+    document.getElementById('teamFilter').addEventListener('change', function() { 
+      const selected = this.value;
+      document.querySelectorAll('#scheduleTable tbody tr').forEach(row => { 
+        row.style.display = selected === 'All' || (row.dataset.team && row.dataset.team.includes(selected)) ? '' : 'none'; 
+      }); 
+    });
+
+    function switchNotifyTab(tab) {
+      const emailTab = document.getElementById('tabEmailContent');
+      const smsTab = document.getElementById('tabSmsContent');
+      const emailBtn = document.getElementById('tabEmailBtn');
+      const smsBtn = document.getElementById('tabSmsBtn');
+      if (tab === 'email') {
+        emailTab.style.display = 'block';
+        smsTab.style.display = 'none';
+        emailBtn.classList.add('active');
+        smsBtn.classList.remove('active');
+        document.getElementById('notifyIcon').textContent = '📧';
+        document.getElementById('notifyTitle').textContent = 'E-TICKET EMAIL SENT';
+      } else {
+        emailTab.style.display = 'none';
+        smsTab.style.display = 'block';
+        smsBtn.classList.add('active');
+        emailBtn.classList.remove('active');
+        document.getElementById('notifyIcon').textContent = '💬';
+        document.getElementById('notifyTitle').textContent = 'PHONE SMS DELIVERED';
+      }
+    }
+
+    function closeSms() {
+      const modal = document.getElementById('smsNotification');
+      if (modal) modal.style.display = 'none';
+    }
+
+    // --- UPI QR Payment Functions ---
+    function openPaymentModal(payload) {
+      pendingBookingPayload = payload;
+      document.getElementById('qrPayAmount').textContent = '₹' + payload.totalFormatted;
+      document.getElementById('qrPayDetails').textContent = `${payload.match} • ${payload.count} Ticket${payload.count > 1 ? 's' : ''} (${payload.standName})`;
+
+      // Dynamic UPI Intent URL encoded in QR
+      const upiUrl = `upi://pay?pa=ipl2026tickets@okhdfcbank&pn=TATA%20IPL%20Ticketing&am=${payload.rawTotal}&cu=INR&tn=IPL-Booking-${payload.bookingId}`;
+      const qrCodeApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(upiUrl)}`;
+      document.getElementById('upiQrImage').src = qrCodeApiUrl;
+
+      // Reset verify button state
+      const verifyBtn = document.getElementById('verifyPayBtn');
+      verifyBtn.disabled = false;
+      verifyBtn.style.background = '#22c55e';
+      verifyBtn.textContent = '✓ I Have Paid (Verify Payment)';
+
+      // Start 5-minute countdown timer
+      clearInterval(paymentTimerInterval);
+      let timeLeft = 300;
+      const countdownEl = document.getElementById('timerCountdown');
+      paymentTimerInterval = setInterval(() => {
+        timeLeft--;
+        if (timeLeft <= 0) {
+          clearInterval(paymentTimerInterval);
+          countdownEl.textContent = '00:00 (Expired)';
+          alert('Payment session expired. Please try again.');
+          cancelPayment();
+          return;
+        }
+        const mins = String(Math.floor(timeLeft / 60)).padStart(2, '0');
+        const secs = String(timeLeft % 60).padStart(2, '0');
+        countdownEl.textContent = `${mins}:${secs}`;
+      }, 1000);
+
+      document.getElementById('paymentModal').style.display = 'flex';
+    }
+
+    function closePaymentModal() {
+      clearInterval(paymentTimerInterval);
+      document.getElementById('paymentModal').style.display = 'none';
+    }
+
+    function cancelPayment() {
+      closePaymentModal();
+      pendingBookingPayload = null;
+    }
+
+    function simulatePaymentSuccess() {
+      if (!pendingBookingPayload) return;
+      const bookingData = Object.assign({}, pendingBookingPayload);
+      const verifyBtn = document.getElementById('verifyPayBtn');
+      verifyBtn.disabled = true;
+      verifyBtn.style.background = '#eab308';
+      verifyBtn.textContent = '⏳ Verifying UPI Transaction...';
+
+      setTimeout(() => {
+        verifyBtn.style.background = '#16a34a';
+        verifyBtn.textContent = '✓ Payment Successful! Generating Tickets...';
+        
+        setTimeout(() => {
+          closePaymentModal();
+          pendingBookingPayload = null;
+          finalizeBooking(bookingData);
+        }, 600);
+      }, 900);
+    }
+
+    function finalizeBooking(payload) {
+      // 1. Update Confirmed Booking Summary Card
+      document.getElementById('confirmedId').textContent = payload.bookingId;
+      document.getElementById('confirmedName').textContent = payload.name;
+      document.getElementById('confirmedPhone').textContent = '+91 ' + payload.phone;
+      document.getElementById('confirmedEmail').textContent = payload.email;
+      document.getElementById('confirmedMatch').textContent = payload.match;
+      document.getElementById('confirmedStand').textContent = payload.standName + ' (₹' + payload.price.toLocaleString('en-IN') + '/seat)';
+      document.getElementById('confirmedQty').textContent = payload.count + ' Ticket' + (payload.count > 1 ? 's' : '');
+      document.getElementById('confirmedTotal').textContent = '₹' + payload.totalFormatted;
+
+      document.getElementById('liveSummaryView').style.display = 'none';
+      document.getElementById('confirmedDetailsView').style.display = 'block';
+
+      // 2. Save into bookings list & update My Bookings table
+      userBookingsList.unshift({
+        id: payload.bookingId,
+        name: payload.name,
+        phone: '+91 ' + payload.phone,
+        email: payload.email,
+        match: payload.match,
+        stand: payload.standName,
+        quantity: payload.count,
+        total: payload.totalFormatted
+      });
+      try {
+        localStorage.setItem('ipl_user_bookings', JSON.stringify(userBookingsList));
+      } catch (e) {}
+      renderBookings();
+
+      // 3. Prepare Email Message & Mailto Link
+      document.getElementById('emailRecipient').textContent = payload.email;
+      document.getElementById('emailSubject').textContent = `🎟️ Confirmed: ${payload.match} (${payload.bookingId})`;
+      document.getElementById('emailBodyText').innerHTML = `
+        Dear <strong>${payload.name}</strong>,<br><br>
+        Thank you for booking with TATA IPL 2026! Payment of <strong>₹${payload.totalFormatted}</strong> received successfully via UPI.<br><br>
+        <div style="background:rgba(255,255,255,0.08);padding:10px 14px;border-radius:8px;border-left:3px solid #22c55e;">
+          🏏 <strong>Match:</strong> ${payload.match}<br>
+          🎟️ <strong>Stand:</strong> ${payload.standName} (${payload.count} ticket${payload.count > 1 ? 's' : ''})<br>
+          💰 <strong>Total Amount Paid:</strong> ₹${payload.totalFormatted} (Payment: UPI Verified)<br>
+          🆔 <strong>Booking Reference:</strong> <span style="color:#fde047;font-weight:bold;">${payload.bookingId}</span>
+        </div><br>
+        <em>⚠️ Please carry this confirmation email or QR entry pass along with a valid Government photo ID to the stadium turnstiles.</em>
+      `;
+
+      // Set prefilled mailto draft link
+      const emailSubjectEncoded = encodeURIComponent(`TATA IPL 2026 Ticket Confirmation - ${payload.bookingId}`);
+      const emailBodyEncoded = encodeURIComponent(
+        `Dear ${payload.name},\n\nYour IPL 2026 match ticket is confirmed!\n\nBooking ID: ${payload.bookingId}\nMatch: ${payload.match}\nCategory: ${payload.standName} (${payload.count} Tickets)\nTotal Paid: ₹${payload.totalFormatted} (UPI Verified)\n\nPlease present this email at the stadium gate.\n\nEnjoy the match!\nTATA IPL 2026 Ticketing Team`
+      );
+      document.getElementById('emailMailtoLink').href = `mailto:${payload.email}?subject=${emailSubjectEncoded}&body=${emailBodyEncoded}`;
+
+      // 4. Prepare Phone SMS Message
+      document.getElementById('smsPhone').textContent = '+91 ' + payload.phone;
+      document.getElementById('smsText').innerHTML = 
+        `Dear <strong>${payload.name}</strong>, payment of ₹${payload.totalFormatted} received! Your IPL ticket booking for <strong>${payload.match}</strong> is <strong>CONFIRMED</strong>! 🏏🎟️<br><br>` +
+        `• <strong>Tickets:</strong> ${payload.count} (${payload.standName} Stand)<br>` +
+        `• <strong>Total Paid:</strong> ₹${payload.totalFormatted}<br>` +
+        `• <strong>Booking ID:</strong> <span style="color:#fde047;font-weight:700;">${payload.bookingId}</span><br><br>` +
+        `<span style="color:#94a3b8;font-size:12px;">Please carry this SMS & a valid ID to the stadium for fast-track entry.</span>`;
+
+      // 5. Show Notification Modal (defaults to Email Sent view)
+      switchNotifyTab('email');
+      document.getElementById('smsNotification').style.display = 'block';
+
+      // 6. Reset form inputs
+      document.getElementById('name').value = '';
+      document.getElementById('email').value = '';
+      document.getElementById('phone').value = '';
+      document.getElementById('quantity').value = 1;
+
+      // 7. Smooth scroll directly to My Ticket Bookings table so user sees their new record!
+      setTimeout(() => {
+        const tableSec = document.getElementById('my-bookings');
+        if (tableSec) {
+          tableSec.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 700);
+
+      // Auto close notification after 18 seconds
+      clearTimeout(window.smsTimer);
+      window.smsTimer = setTimeout(closeSms, 18000);
+    }
+
+    // Intercept form submit and trigger UPI QR Code payment
+    document.getElementById('bookingForm').addEventListener('submit', function(e) { 
+      e.preventDefault(); 
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const match = matchSelect.value;
+      const price = Number(standSelect.value);
+      const count = Number(quantity.value);
+      const rawTotal = price * count;
+      const totalFormatted = rawTotal.toLocaleString('en-IN');
+      const standName = standNames[price];
+      const bookingId = '#IPL26-' + Math.floor(100000 + Math.random() * 900000);
+
+      // Open UPI QR Payment Modal
+      openPaymentModal({
+        name,
+        email,
+        phone,
+        match,
+        price,
+        count,
+        rawTotal,
+        totalFormatted,
+        standName,
+        bookingId
+      });
+    });
+
+    // Initialize on page load
+    updateSummary();
+    renderBookings();
+  </script>
+</body>
+</html>
